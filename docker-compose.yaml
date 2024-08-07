@@ -1,6 +1,7 @@
 version: '3.9'
+
 services:
-  web-frontend-servic:
+  web-frontend-service:
     build: ./frontend/
     container_name: web-frontend
     image: web-frontend-img:latest
@@ -14,7 +15,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - "6060:60"
+      - "6060:80"
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
@@ -31,6 +32,28 @@ services:
     networks:
       - webApp
 
+  mautic:
+    image: mautic/mautic
+    container_name: mautic
+    ports:
+      - "8081:80"
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: example_user
+      MYSQL_PASSWORD: example_pass
+      MYSQL_DATABASE: example_db
+      MAUTIC_DB_HOST: db
+      MAUTIC_DB_PORT: 3306
+    volumes:
+      - mautic_data:/var/www/html
+    networks:
+      - webApp
+    depends_on:
+      - db
+
 networks:
   webApp:
     driver: bridge
+
+volumes:
+  mautic_data:
