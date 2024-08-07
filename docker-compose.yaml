@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  web-frontend-servic:
+    build: ./frontend/
+    container_name: web-frontend
+    image: web-frontend-img:latest
+    cpus: 1
+    mem_limit: 596M
+    ports:
+      - "8080:80"
+    networks:
+      - webApp
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "6060:60"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - webApp
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: example_db
+      MYSQL_USER: example_user
+      MYSQL_PASSWORD: example_pass
+    networks:
+      - webApp
+
+networks:
+  webApp:
+    driver: bridge
