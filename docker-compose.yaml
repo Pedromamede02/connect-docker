@@ -5,22 +5,28 @@ services:
     build: ./frontend/
     container_name: web-frontend
     image: web-frontend-img:latest
-    cpus: 1
-    mem_limit: 596M
-    ports:
-      - "8080:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.webfrontend.rule=Host(`site.connectifydigital.com.br`)"  # Substitua pelo seu domínio
+      - "traefik.http.routers.webfrontend.entrypoints=web,websecure"
+      - "traefik.http.routers.webfrontend.tls=true"
+      - "traefik.http.routers.webfrontend.tls.certresolver=leresolver"
     networks:
-      - webApp
+      - minha_rede
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    ports:
-      - "6060:80"
     environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
+      - PMA_HOST=db
+      - PMA_PORT=3306
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.connectifydigital.com.br`)"  # Substitua pelo seu domínio
+      - "traefik.http.routers.phpmyadmin.entrypoints=web,websecure"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.routers.phpmyadmin.tls.certresolver=leresolver"
     networks:
-      - webApp
+      - minha_rede
 
   db:
     image: mysql:5.7
@@ -29,31 +35,11 @@ services:
       MYSQL_DATABASE: example_db
       MYSQL_USER: example_user
       MYSQL_PASSWORD: example_pass
-    networks:
-      - webApp
+      networks:
+      - minha_rede
 
-  mautic:
-    image: mautic/mautic
-    container_name: mautic
-    ports:
-      - "8081:80"
-    environment:
-      MYSQL_HOST: db
-      MYSQL_USER: example_user
-      MYSQL_PASSWORD: example_pass
-      MYSQL_DATABASE: example_db
-      MAUTIC_DB_HOST: db
-      MAUTIC_DB_PORT: 3306
-    volumes:
-      - mautic_data:/var/www/html
-    networks:
-      - webApp
-    depends_on:
-      - db
 
 networks:
-  webApp:
-    driver: bridge
-
-volumes:
-  mautic_data:
+  minha_rede:
+    name: minha_rede
+    external: true
