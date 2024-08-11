@@ -1,3 +1,4 @@
+
 # Use a imagem base do Apache HTTP Server
 FROM httpd:latest
 
