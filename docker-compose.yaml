@@ -2,31 +2,21 @@ version: '3.9'
 
 services:
   web-frontend-service:
+    build: ./frontend/
+    container_name: web-frontend
     image: web-frontend-img:latest
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.webfrontend.rule=Host(`site.connectifydigital.com.br`)"
-      - "traefik.http.routers.webfrontend.entrypoints=web,websecure"
-      - "traefik.http.routers.webfrontend.tls=true"
-      - "traefik.http.routers.webfrontend.tls.certresolver=letsencryptresolver"
-
-
     networks:
-      - connect
+      - npm_public
+    ports:
+      - 8087:80
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.phpmyadmin.rule=Host(`phpmyadmin.connectifydigital.com.br`)"
-      - "traefik.http.routers.phpmyadmin.entrypoints=web,websecure"
-      - "traefik.http.routers.phpmyadmin.tls=true"
-      - "traefik.http.routers.phpmyadmin.tls.certresolver=letsencryptresolver"
     networks:
-      - connect
+      - npm_public
 
   db:
     image: mysql:5.7
@@ -36,13 +26,9 @@ services:
       MYSQL_USER: example_user
       MYSQL_PASSWORD: example_pass
     networks:
-      - connect
+      - npm_public
 
 networks:
-  connect:
+  npm_public:
+    name: npm_public
     external: true
-
-volumes:
-  vol_certificates:
-    external: true
-    name: volume_swarm_certificates
