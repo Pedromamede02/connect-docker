@@ -1,15 +1,6 @@
 version: '3.9'
 
 services:
-  web-frontend-service:
-    build: ./frontend/
-    container_name: web-frontend
-    image: web-frontend-img:latest
-    networks:
-      - npm_public
-    ports:
-      - 8087:80
-
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -27,6 +18,16 @@ services:
       MYSQL_PASSWORD: example_pass
     networks:
       - npm_public
+
+  nginx-service:
+    image: nginx:alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    container_name: nginx-server
+    networks:
+      - npm_public
+    ports:
+      - 8087:80
 
 networks:
   npm_public:
