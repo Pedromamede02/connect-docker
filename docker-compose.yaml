@@ -6,8 +6,10 @@ services:
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
+    ports:
+      - 8080:80
     networks:
-      - npm_public
+      - connect_public
 
   db:
     image: mysql:5.7
@@ -17,7 +19,7 @@ services:
       MYSQL_USER: example_user
       MYSQL_PASSWORD: example_pass
     networks:
-      - npm_public
+      - connect_public
 
   nginx-service:
     image: nginx:alpine
@@ -25,11 +27,11 @@ services:
       - ./frontend:/usr/share/nginx/html
     container_name: nginx-server
     networks:
-      - npm_public
+      - connect_public
     ports:
       - 8087:80
 
 networks:
-  npm_public:
-    name: npm_public
+  connect_public:
+    name: connect_public
     external: true
