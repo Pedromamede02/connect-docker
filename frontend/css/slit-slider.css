@@ -265,19 +265,3 @@
     margin: auto;
 }
 
-
-
-.image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Altura da tela inteira */
-  }
-
-  .image-container img {
-    max-width: 100%;
-    max-height: 100%;
-    margin: auto;
-    visibility: visible;
-    animation-name: fadeInUp;
-  }
