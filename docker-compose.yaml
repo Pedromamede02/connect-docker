@@ -9,7 +9,7 @@ services:
     ports:
       - 8080:80
     networks:
-      - connect_public
+      - npm_public
 
   db:
     image: mysql:5.7
@@ -19,7 +19,7 @@ services:
       MYSQL_USER: example_user
       MYSQL_PASSWORD: example_pass
     networks:
-      - connect_public
+      - npm_public
 
   nginx-service:
     image: nginx:alpine
@@ -27,11 +27,11 @@ services:
       - ./frontend:/usr/share/nginx/html
     container_name: nginx-server
     networks:
-      - connect_public
+      - npm_public
     ports:
       - 8087:80
 
 networks:
-  connect_public:
-    name: connect_public
+  npm_public:
+    name: npm_public
     external: true
