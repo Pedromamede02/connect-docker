@@ -6,8 +6,8 @@ services:
     environment:
       - PMA_HOST=db
       - PMA_PORT=3306
-    ports:
-      - 8080:80
+    expose:
+      - "8080"
     networks:
       - npm_public
 
@@ -28,8 +28,8 @@ services:
     container_name: nginx-server
     networks:
       - npm_public
-    ports:
-      - 8087:80
+    expose:
+      - "8087"
 
 networks:
   npm_public:
